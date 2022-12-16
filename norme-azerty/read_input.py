@@ -35,13 +35,13 @@ _keyslots_file = 'input/keyslots/keyslots.txt'
 _fixed_file = ""
 _letter_file = 'input/letters/letters.txt'
 _character_file = ""
-_azerty_file = "input/layouts/azerty.txt"
+_azerty_file = "input/layouts/qwerty.txt"
 _similarity_file = 'input/similarity/similarity.txt'
 _distance_file_0 = "input/distance/distance0.txt"
 _distance_file_1 = "input/distance/distance1.txt"
 _distance_file_consistency = "input/distance/distance_consistency.txt"
-_frequency_letter_file = ""
-_frequency_bigram_file = ""
+_frequency_letter_file = ["/input/frequencies/frequency_letters_code_setTEST.txt","/input/frequencies/frequency_letters_formal_setTEST.txt"]
+_frequency_bigram_file = ["/input/frequencies/frequency_bigrams_code_setTEST.txt","/input/frequencies/frequency_bigrams_formal_setTEST.txt"]
 _ergonomics_file = "input/ergonomics/ergonomics.txt"
 _performance_file = "input/performance/performance.txt"
 scenario = ""
@@ -156,7 +156,7 @@ def get_azerty():
     azerty = pd.read_csv(_azerty_file, index_col=1, sep="\t", encoding='utf-8', quoting=3)
     # azerty.index=azerty.index.str.strip()
     azerty = azerty.to_dict()["keyslot"]
-    azerty = {(correct_diacritic(c.strip())): s for c, s in azerty.items()}
+    print(azerty)
     return azerty
 
 
@@ -210,7 +210,7 @@ def get_fixed_mapping():
     fixed = pd.read_csv(_fixed_file, index_col=1, sep="\t", encoding='utf-8', quoting=3)
     # fixed.index=fixed.index.str.strip()
     fixed = fixed.to_dict()["keyslot"]
-    fixed = {(correct_diacritic(c.strip())): s for c, s in fixed.items()}
+
     return fixed
 
 
@@ -316,6 +316,7 @@ def get_probabilities(corpus_weights={}):
                     p_bigrams = {c: ((v * weight) + p_bigrams[c]) for c, v in bigrams.items()}
         else:
             # weigh everything evenly
+            print(_frequency_letter_file)
             weight = 1 / float(len(_frequency_letter_file))
             for l_file, b_file in zip(_frequency_letter_file, _frequency_bigram_file):
                 print("no weights given, weighting each corpus evenly")
@@ -454,8 +455,6 @@ def get_all_input_values(corpus_weights):
     characters = get_characters()
     keyslots = get_keyslots()
 
-    similarity_c_c = get_character_similarities()
-    similarity_c_l = get_character_letter_similarities()
 
     distance_level_0, distance_level_1 = get_distances()
 
@@ -471,7 +470,7 @@ def get_all_input_values(corpus_weights):
            letters, \
            p_single, p_bigram, \
            performance, \
-           similarity_c_c, similarity_c_l, \
+           {}, {}, \
            distance_level_0, distance_level_1, \
            ergonomics
 
