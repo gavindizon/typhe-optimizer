@@ -136,8 +136,8 @@ def kaufmannbroeckx_reformulation(input_filename, output_filename):
     with open(input_filename, "r") as file:
         # read all lines and strip off newline char
         lines = file.read().splitlines()
-        print("LINES: ", input_filename)
-        print(lines)
+        #print("LINES: ", input_filename)
+        #print(lines)
 
         # we ignore two lines of comments, third line is the number of letters and keys
         n = int(lines[2])

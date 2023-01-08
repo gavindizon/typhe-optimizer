@@ -193,7 +193,7 @@ def plot_mapping(mapping, plotname="", azerty=-1, numbers=-1, letters=-1,
         mapping = get_mapping(mapping)
 
     if objective == -1:
-        objective, p, a, f, e = get_objectives(mapping, w_p, w_a, w_f, w_e, corpus_weights, quadratic=quadratic)
+        objective, p, f, e = get_objectives(mapping, w_p, w_a, w_f, w_e, corpus_weights, quadratic=quadratic)
 
     if azerty == -1:
         azerty = get_azerty()

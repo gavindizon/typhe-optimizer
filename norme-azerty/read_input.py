@@ -208,9 +208,10 @@ def get_fixed_mapping():
         They are only considered in the association cost
     """
     fixed = pd.read_csv(_fixed_file, index_col=1, sep="\t", encoding='utf-8', quoting=3)
-    # fixed.index=fixed.index.str.strip()
+    #fixed.index=fixed.index.str.strip()
     fixed = fixed.to_dict()["keyslot"]
-
+    print(fixed)
+    fixed = {(correct_diacritic(c.strip())): s for c, s in fixed.items()}
     return fixed
 
 

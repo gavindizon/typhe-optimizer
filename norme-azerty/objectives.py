@@ -256,8 +256,9 @@ def get_quadratic_costs(characters, \
                     prob_sim[(c1, c2)] = 0
 
         # normalize with normalization factor of full objective (later multiplied with distance)
-        max_sum = 0
-        min_sum = 0
+        max_sum = 2
+        min_sum = 1
+
         for c1 in characters:
             # for each character determine the maximum association cost for assigning that character to a slot and sum up
             costs_per_slot_min = []
@@ -279,6 +280,8 @@ def get_quadratic_costs(characters, \
 
         # normalization factor is included in the distance because there all values are > 0. Otherwise there are some problems
         distance_level_0_norm = distance_level_0.copy()
+        print("DISTANCE NORM: ", distance_level_0_norm)
+        print("MAXSUM MINSUM: ", max_sum, min_sum)
         n = len(characters)
         for (s1, s2), v in distance_level_0.items():
             if v > 0:
