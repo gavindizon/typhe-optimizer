@@ -136,6 +136,8 @@ def kaufmannbroeckx_reformulation(input_filename, output_filename):
     with open(input_filename, "r") as file:
         # read all lines and strip off newline char
         lines = file.read().splitlines()
+        print("LINES: ", input_filename)
+        print(lines)
 
         # we ignore two lines of comments, third line is the number of letters and keys
         n = int(lines[2])
@@ -145,6 +147,8 @@ def kaufmannbroeckx_reformulation(input_filename, output_filename):
         for i in range(n):
             # Expecting n lines
             l = lines[i + line_counter]
+
+            print("VALUE", l)
             if "#" in l:
                 raise ValueError("fewer probabilities than number of letters indicated")
             else:
