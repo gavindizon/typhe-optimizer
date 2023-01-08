@@ -324,7 +324,7 @@ def create_reformulation_input(w_P, w_A, w_F, w_E, corpus_weights, filename, qua
         = get_all_input_values(corpus_weights)
 
     # linear_costs is already weighted, the x_ are not
-    linear_costs, x_p, x_a, x_f, x_e = get_linear_costs(w_P, w_A, w_F, w_E,
+    linear_costs, x_p, x_f, x_e = get_linear_costs(w_P, w_A, w_F, w_E,
                                                         azerty,
                                                         characters,
                                                         keyslots,
@@ -346,14 +346,17 @@ def create_reformulation_input(w_P, w_A, w_F, w_E, corpus_weights, filename, qua
     # Writes an input file for the reformualtion
     f = codecs.open("mappings/reformulations/" + filename + ".txt", 'w', encoding="utf-8")
     f.write(
-        "#scenario=%s,set=%s,w_P=%f,w_A=%f,w_F=%f,w_E=%f,w_formal=%f,w_twitter=%f,w_code=%f\n" % (scenario, char_set,
+        "#scenario=%s,set=%s,w_P=%f,w_A=%f,w_F=%f,w_E=%f,academicTagalog=%f,Taglish5050=%f,Taglish7030=%f,cohfie=%f,storyTagalog=%f\n" % (scenario, char_set,
                                                                                                   w_P, w_A, w_F, w_E,
                                                                                                   corpus_weights[
-                                                                                                      "formal"],
+                                                                                                      "academicTagalog"],
                                                                                                   corpus_weights[
-                                                                                                      "twitter"],
+                                                                                                      "Taglish5050"],
                                                                                                   corpus_weights[
-                                                                                                      "code"]))
+                                                                                                      "Taglish7030"],
+                                                                                                    corpus_weights[
+                                                                                                      "cohfie"],
+                                                                                                    corpus_weights["storyTagalog"]))
     f.write("# number of letters and keys\n")
     f.write(str(len(keyslots)) + "\n")
     f.write("# w_A*probabilities*similarities\n")

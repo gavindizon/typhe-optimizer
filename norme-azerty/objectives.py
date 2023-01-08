@@ -77,7 +77,7 @@ def accu_get_objectives(mapping, w_p, w_a, w_f, w_e,
         For a given mapping, returns the objective value for the given weights, and the individual objectives values for P,A,F,E
     """
     # Compute linear cost matrices
-    linear_cost, x_P, x_A, x_F, x_E = get_linear_costs(w_p, w_a, w_f, w_e,
+    linear_cost, x_P, x_F, x_E = get_linear_costs(w_p, w_a, w_f, w_e,
                                                        azerty,
                                                        characters,
                                                        keyslots,
@@ -108,39 +108,39 @@ def accu_get_objectives(mapping, w_p, w_a, w_f, w_e,
     E = 0
     for c, s in mapping.items():
         P += x_P[c, s]
-        A += x_A[c, s]
+        #A += x_A[c, s]
         F += x_F[c, s]
         E += x_E[c, s]
 
-    lin_A = A
+    #lin_A = A
 
-    if quadratic:
-        prob_sim, distance_level_0_norm = get_quadratic_costs(characters, \
-                                                              keyslots, \
-                                                              p_single,
-                                                              similarity_c_c)
-        for (c1, c2) in similarity_c_c:
-            if c1 in mapping and c2 in mapping:
-                s1 = mapping[c1]
-                s2 = mapping[c2]
-                v = prob_sim[c1, c2] * distance_level_0_norm[s1, s2]
-                A += v
+    # if quadratic:
+    #     prob_sim, distance_level_0_norm = get_quadratic_costs(characters, \
+    #                                                           keyslots, \
+    #                                                           p_single,
+    #                                                           similarity_c_c)
+    #     for (c1, c2) in similarity_c_c:
+    #         if c1 in mapping and c2 in mapping:
+    #             s1 = mapping[c1]
+    #             s2 = mapping[c2]
+    #             v = prob_sim[c1, c2] * distance_level_0_norm[s1, s2]
+    #             A += v
 
     if P < 0:
         print("Performance negative, rounded to 0: %f" % P)
         P = np.max([0, P])
-    if A < 0:
-        print("Association negative, rounded to 0: %f" % A)
-        A = np.max([0, A])
+    # if A < 0:
+    #     print("Association negative, rounded to 0: %f" % A)
+    #     A = np.max([0, A])
     if F < 0:
         print("Familiarity negative, rounded to 0: %f" % F)
         F = np.max([0, F])
     if E < 0:
         print("Ergonomics negative, rounded to 0: %f" % E)
         E = np.max([0, E])
-    objective = w_p * P + w_a * A + w_f * F + w_e * E
+    objective = w_p * P + w_f * F + w_e * E
     print("objective: ", objective)
-    return objective, P, A, F, E
+    return objective, P, F, E
 
 
 def get_linear_costs(w_p, w_a, w_f, w_e,
@@ -160,7 +160,7 @@ def get_linear_costs(w_p, w_a, w_f, w_e,
 
     if os.path.isfile("input/normalized/" + "x_P_" + scenario + "_" + char_set + ".txt"):
         x_P = _read_tuple_list_to_dict("input/normalized/" + "x_P_" + scenario + "_" + char_set + ".txt")
-        x_A = _read_tuple_list_to_dict("input/normalized/" + "x_A_" + scenario + "_" + char_set + ".txt")
+        #x_A = _read_tuple_list_to_dict("input/normalized/" + "x_A_" + scenario + "_" + char_set + ".txt")
         x_F = _read_tuple_list_to_dict("input/normalized/" + "x_F_" + scenario + "_" + char_set + ".txt")
         x_E = _read_tuple_list_to_dict("input/normalized/" + "x_E_" + scenario + "_" + char_set + ".txt")
     else:
@@ -206,7 +206,7 @@ def get_linear_costs(w_p, w_a, w_f, w_e,
         print("========= Normalize Performance =========")
         x_P = normalize_empirically(x_P, characters, keyslots, capitalization_constraints=1)
         print("========= Normalize Association =========")
-        x_A = normalize_empirically(x_A, characters, keyslots, capitalization_constraints=1)
+        #x_A = normalize_empirically(x_A, characters, keyslots, capitalization_constraints=1)
         print("========= Normalize Familiarity =========")
         x_F = normalize_empirically(x_F, characters, keyslots, capitalization_constraints=1)
         print("========= Normalize Ergonomics =========")
@@ -214,17 +214,19 @@ def get_linear_costs(w_p, w_a, w_f, w_e,
 
         # write into file for later use
         write_tuplelist(x_P, "input/normalized/" + "x_P_" + scenario + "_" + char_set + ".txt")
-        write_tuplelist(x_A, "input/normalized/" + "x_A_" + scenario + "_" + char_set + ".txt")
+        #write_tuplelist(x_A, "input/normalized/" + "x_A_" + scenario + "_" + char_set + ".txt")
         write_tuplelist(x_F, "input/normalized/" + "x_F_" + scenario + "_" + char_set + ".txt")
         write_tuplelist(x_E, "input/normalized/" + "x_E_" + scenario + "_" + char_set + ".txt")
 
     # weighted sum of linear terms
     linear_cost = {}
+
     for c in characters:
         for s in keyslots:
-            linear_cost[c, s] = (w_p * x_P[c, s]) + (w_a * x_A[c, s]) + (w_f * x_F[c, s]) + (w_e * x_E[c, s])
+            #linear_cost[c, s] = (w_p * x_P[c, s]) + (w_a * x_A[c, s]) + (w_f * x_F[c, s]) + (w_e * x_E[c, s])
+            linear_cost[c, s] = (w_p * x_P[c, s]) + (w_f * x_F[c, s]) + (w_e * x_E[c, s])
 
-    return linear_cost, x_P, x_A, x_F, x_E
+    return linear_cost, x_P, x_F, x_E
 
 
 def get_quadratic_costs(characters, \
@@ -407,5 +409,5 @@ def _read_tuple_list_to_dict(path):
 def write_tuplelist(data, filename):
     data_strings = ["%s %s %f\n" % (s, l, n) for (s, l), n in data.items()]
     data_strings = [s.encode("utf-8") for s in data_strings]
-    with open(filename, 'w') as data_file:
+    with open(filename, 'wb') as data_file:
         data_file.writelines(data_strings)
